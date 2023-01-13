@@ -1,7 +1,10 @@
-// import { useState } from "react";
+import Anecdotes from "./components/Anecdotes";
 
 const App = () => {
-  return <div>code here</div>;
+  return (
+    <>
+      <Anecdotes />
+    </>
+  );
 };
-
 export default App;
