@@ -48,7 +48,17 @@ const App = () => {
   const parts = courses[0].parts.map((item) => item.exercises);
   const initialValue = 0;
   const total = parts.reduce((acc, curr) => acc + curr, initialValue);
-
+  courses.forEach(() => {
+    console.log(`${courses.name}`);
+    return (
+      <Course
+        course={courses[0].name}
+        parts={courses[0].parts}
+        exercises={courses[0].parts.exercises}
+        total={total}
+      />
+    );
+  });
   return (
     <Course
       course={courses[0].name}
