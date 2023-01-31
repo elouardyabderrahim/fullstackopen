@@ -38,16 +38,25 @@ const remove = async (id) => {
   }
 };
 const update = async (id, newObject) => {
-  const request = await axios.put(`${baseUrl}/${id}`, newObject);
+  const request = axios.put(`${baseUrl}/${id}`, newObject);
   try {
-    request.then((response) => {
-      console.log("update method phone book", response.data);
-      return response.data;
-    });
+    const response = await request;
+    return response.data;
   } catch (error) {
-    console.log("PUT method error is :", error);
+    return console.log("error update", error);
   }
 };
+// const update = async (id, newObject) => {
+//   const request = await axios.put(`${baseUrl}/${id}`, newObject);
+//   try {
+//     request.then((response) => {
+//       console.log("update method phone book", response.data);
+//       return response.data;
+//     });
+//   } catch (error) {
+//     console.log("PUT method error is :", error);
+//   }
+// };
 export default {
   getAll,
   add,

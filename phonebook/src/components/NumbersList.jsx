@@ -1,4 +1,9 @@
 const NumbersList = ({ searchPeron, onRemove }) => {
+  console.log(
+    "🚀 ~ file: NumbersList.jsx:2 ~ NumbersList ~ searchPeron",
+    searchPeron
+  );
+
   return (
     <>
       <h2>Numbers</h2>

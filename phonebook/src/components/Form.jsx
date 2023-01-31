@@ -10,13 +10,11 @@ const Form = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchedName, setSearchedName] = useState("");
   useEffect(() => {
-    // axios.get(" http://localhost:3001/persons").then((response) => {
-    //   console.log(response.data);
-    //   setPersons(response.data);
-    // });
-
     // get all
-    phonebookService.getAll().then((response) => setPersons(response));
+    phonebookService.getAll().then((response) => {
+      console.log("🚀 ~ file: Form.jsx:15 ~ useEffect ~ response", response);
+      return setPersons(response);
+    });
   }, []);
   const onchangeHandler = (event) => {
     event.preventDefault();
@@ -43,30 +41,36 @@ const Form = () => {
     console.log("exist", exist);
     return exist;
   };
+
+  // adding New Person
   const addingNewPeron = () => {
     const obj = { name: newName, number: newNumber };
-    /*setPersons(persons.concat(obj));
-      console.log(persons);
-      setNewName("");
-      setNewNumber("");*/
-    phonebookService.add(obj).then((addedpersone) => {
+
+    phonebookService.add(obj).then((addedPerson) => {
       // added to the person array
-      setPersons(persons.concat(addedpersone));
-      console.log("added method Form", addedpersone);
+      setPersons(persons.concat(addedPerson));
+      console.log("added method Form", addedPerson);
       setNewName("");
       setNewNumber("");
     });
   };
+
   const verifyOrAdd = (event) => {
     event.preventDefault();
     const exist = verifyIfExistInList(newName);
     if (exist) {
-      
-      alert(newName);
+      if (
+        window.confirm(
+          `${newName} already exist in contacts are you sure you want to replace this number with the new one ?`
+        )
+      ) {
+        update(newName);
+      }
     } else {
       addingNewPeron();
     }
   };
+  // remove a person from the list
   const remove = (id) => {
     if (window.confirm("are you sure you want to delete ?")) {
       phonebookService.remove(id).then(() => {
@@ -74,22 +78,58 @@ const Form = () => {
       });
     }
   };
+
+  /*
+    const note = notes.find((n) => n.id === id);
+    const changedNote = { ...note, important: !note.important };
+
+   notesService.update(id, changedNote).then((updatedNote) => {
+      // if n.id!==id is true take the same note and add it the the new array else add the updated note
+      setNotes(notes.map((n) => (n.id !== id ? n : updatedNote)));
+    });
+  
+  */
   // update
-  const update=(id)=>{
-    phonebookService.update();
-    
-      }
+  const update = (newName) => {
+    const updatedPerson = persons.find((p) => p.name == newName);
+    console.log("updated person", updatedPerson);
+    const personUpdatedObject = {
+      ...updatedPerson,
+      number: newNumber,
+    };
+    console.log(
+      "🚀 ~ file: Form.jsx:97 ~ update ~ personUpdatedObject",
+      personUpdatedObject
+    );
+
+    phonebookService
+      .update(updatedPerson.id, personUpdatedObject)
+      .then((response) => {
+        console.log("🚀 ~ file: Form.jsx:103 ~ .then ~ response", response);
+
+        setPersons((previousState) => {
+          const tempPersons = previousState.map((p) =>
+            p.name !== newName ? p : response
+          );
+          return tempPersons;
+        });
+        console.log("after map inside update", persons);
+      });
+  };
 
   return (
     <div>
       <form onSubmit={verifyOrAdd}>
         <div>
           <Filter value={searchedName} onchange={onchangeHandler} />
+
+          <br></br>
           <InputField
             label="Name:"
             value={newName}
             onchange={handlingNameOnChange}
           />
+
           <InputField
             label="Number:"
             value={newNumber}
