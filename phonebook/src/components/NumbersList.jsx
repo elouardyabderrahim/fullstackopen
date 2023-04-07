@@ -10,7 +10,10 @@ const NumbersList = ({ searchPeron, onRemove }) => {
       {searchPeron.map((per) => (
         <div key={per.id}>
           {per.name} <strong>number</strong> {per.number}
-          <button onClick={() => onRemove(per.id)}> delete </button>
+          <button className="deletebutton" onClick={() => onRemove(per.id)}>
+            {" "}
+            delete{" "}
+          </button>
         </div>
       ))}
     </>
