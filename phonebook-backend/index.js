@@ -38,8 +38,8 @@ app.get("/api/persons", (request, response) => {
 });
 
 app.get("/info", (request, response) => {
-  response.json(`PhoneBook has info for ${persons.length} people
-    ${Date()}
+  response.send(`<p>PhoneBook has info for ${persons.length} people</p>
+    <p>${Date()}<p>
   `);
 });
 
