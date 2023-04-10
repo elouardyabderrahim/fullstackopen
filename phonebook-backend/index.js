@@ -13,7 +13,9 @@ Middleware are functions that can be used for handling
 
 */
 app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms")
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :req-body"
+  )
 );
 // or morgan('tiny')
 // npm install --save-dev nodemon
