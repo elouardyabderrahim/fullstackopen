@@ -1,11 +1,25 @@
 const express = require("express");
 app = express();
+const morgan = require("morgan");
 // built-in middeleware function in express. json-parser
 app.use(express.json());
+/*
+Middleware are functions that can be used for handling
+ request and response objects.
+ The json-parser we used earlier takes the raw data from
+  the requests that are stored in the request object, parses
+   it into a JavaScript object and assigns it to the request 
+   object as a new property body.
 
+*/
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms")
+);
+// or morgan('tiny')
 // npm install --save-dev nodemon
 // node_modules/.bin/nodemon index.js
 //  after adding dev i scripts in package.json npm run dev
+
 const persons = [
   {
     id: 1,
@@ -28,6 +42,11 @@ const persons = [
     number: "39-23-6423122",
   },
 ];
+// create a custom Morgan token for logging request body
+morgan.token("req-body", (req, res) => {
+  return JSON.stringify(req.body);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
