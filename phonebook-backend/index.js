@@ -1,8 +1,20 @@
 const express = require("express");
 app = express();
 const morgan = require("morgan");
+const cors = require("cors");
+
+const requestLogger = (request, response, next) => {
+  console.log("Method:", request.method);
+  console.log("Path:  ", request.path);
+  console.log("Body:  ", request.body);
+  console.log("---");
+  next();
+};
+
 // built-in middeleware function in express. json-parser
 app.use(express.json());
+app.use(requestLogger);
+app.use(cors());
 /*
 Middleware are functions that can be used for handling
  request and response objects.
@@ -49,7 +61,8 @@ morgan.token("req-body", (req, res) => {
   return JSON.stringify(req.body);
 });
 
-const PORT = 3001;
+// changing the port for deployment
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -118,3 +131,7 @@ app.post("/api/persons", (request, response) => {
   persons.concat(person);
   response.json(person);
 });
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+app.use(unknownEndpoint);
